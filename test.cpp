@@ -3,9 +3,9 @@
 #include <string>
 
 int main() {
-	std::string str = "hello";
-	char *c = "how", *d = "are";
-	std::strcat(c, d);
-	std::cout << std::strlen(c) << std::endl;
+	int size;
+	std::string str;
+	std::cin >> size >> str;
+	std::cout << size << "->" << str << std::endl;
 	return 0;
 }
