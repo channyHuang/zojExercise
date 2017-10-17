@@ -1,3 +1,4 @@
+//give up
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -41,9 +42,13 @@ class Node {
 };
 
 bool same(Node *a, Node *b) {
-	if (a->bw != b->bw) return false;
+	if (a == NULL && b == NULL) return true;
+	else if (a == NULL || b == NULL) return false;
+
+	if (a->edge != b->edge || a->bw != b->bw) return false;
 	if (a->bw == 0) {
-		for (int i = 0; i < 4; i++) {
+		if (a->edge == 2) return a->value == b->value;
+		for (int i = 0; i < 4; i++) {			
 			if (same(a->children[i], b->children[i]) == false) return false;
 		}
 		return true;
