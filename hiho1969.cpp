@@ -1,44 +1,69 @@
 #include <iostream>
+#include <cstring>
+#include <string>
 
 #define MAX 5000
+#define MAXN 1000002
 
 int nNum[MAX];
+bool bNum[MAXN];
 
-int findTargetNum(int num, int startPos, int endPos) 
+void qSort(int nStartPos, int nEndPos)
 {
-	if (endPos < startPos) return -1;
+	if (nStartPos >= nEndPos) return;
 
+    int start = nStartPos, end = nEndPos;
+	int curPos = start;
 
-	if (nNum[startPos] == num) return startPos;
-	if (nNum[endPos] == num) return endPos;
-	if (nNum[startPos] > num) return -1;
-	if (nNum[endPos] < num) return -1;
+	bool flag = true;
+	while(flag)
+	{
+		flag = false;
+	while(start < curPos && nNum[start] < nNum[curPos]) start++;
+	if (start < curPos)
+	{
+		int tmp = nNum[start];
+		nNum[start] = nNum[curPos];
+		nNum[curPos] = tmp;
+		curPos = start;
+		flag = true;
+	}
+	while(end > curPos && nNum[end] > nNum[curPos]) end--;
+	if (end > curPos)
+	{
+		int tmp = nNum[end];
+		nNum[end] = nNum[curPos];
+		nNum[curPos] = tmp;
+		curPos = end;
+		flag = true;
+		}
+	}
 
-	
+	qSort(nStartPos, curPos);
+	qSort(curPos + 1, nEndPos);
+}	
 
-	int midPos = (startPos + endPos)/2;	
-
-	if (nNum[midPos] > num)	
-		return findTargetNum(num, startPos, midPos - 1);
-	else if (nNum[midPos] < num)
-		return findTargetNum(num, midPos + 1, endPos);
-	else return midPos;
-}
+#define DEBUG true
 
 int main() {
 	int nTotalNum, nTmp;
-	int nMinu[MAXN];
+
+	memset(nNum, 0, MAX);
+
 	std::cin >> nTotalNum;
 	for (int i = 0; i < nTotalNum; i++) {
-		std::cin >> nTmp;
-		int j = i - 1;	
-		while(j >= 0 && nNum[j] > nTmp) {
-		       	nNum[j + 1] = nNum[j];
-			j--;
-		}
-		nNum[j] = nTmp;	
+		std::cin >> nNum[i];
+		bNum[nTmp] = true;
 	}
 
+	qSort(0, nTotalNum - 1);
+
+	if (DEBUG)
+	{
+		for (int i = 0; i < nTotalNum; i++) 
+			std::cout << " " <<  nNum[i];
+	} 
+	
 	if (nTotalNum < 2) return 0;
 
 	int nMaxCount = 0;
@@ -49,22 +74,19 @@ int main() {
 		{
 			nCurCount = 2;
 			int nTarget = nNum[j] + nNum[j] - nNum[i];  
-			int nStartPos = j + 1;
-			int nEndPos = nTotalNum - 1;
+
+
 			while (1)
 			{
-				int res = findTargetNum(nTarget, nStartPos, nEndPos);
-				if (res == -1) break;
-				nCurCount++;
-				nTarget = nNum[res] + nNum[j] - nNum[i];
-				nStartPos = res + 1;
+				if (bNum[nTarget]) 	nCurCount++;
+				nTarget = nTarget + nNum[j] - nNum[i];	
 			}
 
 			if (nCurCount >= 3 && nCurCount > nMaxCount) nMaxCount = nCurCount;	
 		}
 	}
 
-	std::cout << nCurCount;
+	std::cout << nMaxCount;
 
 	return 0;
 }
