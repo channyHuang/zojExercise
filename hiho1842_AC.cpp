@@ -11,9 +11,11 @@ int main() {
 	int oneOfB = numOfB, twoOfB = 0;
 	int blockOfA, blockOfB;
 	bool flag = false;
-	for (; oneOfA >= 2; oneOfA -= 2, twoOfA++) {
+	for (; oneOfA >= 0; oneOfA -= 2, twoOfA++) {
 		blockOfA = oneOfA + twoOfA;
+
 		if (blockOfA > numOfB + 1 || blockOfA < numOfB / 2 + numOfB % 2 - 1) continue;
+
 		for (oneOfB = numOfB, twoOfB = 0; oneOfB >= 2; oneOfB -= 2, twoOfB++) {
 			if (oneOfB + twoOfB <= blockOfA + 1 && oneOfB + twoOfB >= blockOfA - 1) break;
 		}
@@ -23,7 +25,7 @@ int main() {
 			break;
 		}
 	}
-	std::cout << blockOfA << " " << blockOfB << " " <<  flag << std::endl;
+	//std::cout << oneOfA << " " << twoOfA << " " << blockOfB << " " <<  flag << std::endl;
 	bool lastChar = 1;//0-A, 1-B
 	if (flag) {
 		while(blockOfA || blockOfB) {
@@ -49,19 +51,36 @@ int main() {
 				blockOfB--;
 				lastChar = 1;
 			} else {
-				if (oneOfA) {
-					std::cout << "A";
-					oneOfA--;
+				if (lastChar == 1) {
+					if (oneOfA) {
+						std::cout << "A";
+						oneOfA--;
+					} else {
+						std::cout << "AA";
+						twoOfA--;
+					}
+					if (oneOfB) {
+						std::cout << "B";
+						oneOfB--;
+					} else {
+						std::cout << "BB";
+						twoOfB--;
+					}
 				} else {
-					std::cout << "AA";
-					twoOfA--;
-				}
-				if (oneOfB) {
-					std::cout << "B";
-					oneOfB--;
-				} else {
-					std::cout << "BB";
-					twoOfB--;
+					if (oneOfB) {
+						std::cout << "B";
+						oneOfB--;
+					} else {
+						std::cout << "BB";
+						twoOfB--;
+					}
+					if (oneOfA) {
+						std::cout << "A";
+						oneOfA--;
+					} else {
+						std::cout << "AA";
+						twoOfA--;
+					}
 				}
 				blockOfA--;
 				blockOfB--;
