@@ -27,50 +27,29 @@ long long mapPos(long long x, long long y) {
 void search(long long x, long long y, int &res) {
 	if (x <= 0 || x > totalRow || y <= 0 || y > totalCol) return;
 	long long pos = mapPos(x, y);
+	//std::cout << "s" << x << " " << y << " " << pos << std::endl;
 	Node *curNode = nodes[pos];
 	if (curNode == nullptr) {
-		curNode = new Node(pos, x, y);
+		nodes[pos] = new Node(pos, x, y);
 		res++;
-		std::cout << x << " " << y << std::endl;
+		//std::cout << x << " " << y << std::endl;
 		search(x + a, y + b, res);
 		search(x + c, y + d, res);
 		return;
 	}
-	if (curNode->x > x) {
-		Node *newNode = new Node(pos, x, y);
-		newNode->next = curNode;
-		curNode->pre = newNode;
-		nodes[pos] = newNode;
-		res++;
-		std::cout << x << " " << y << std::endl;
-		search(x + a, y + b, res);
-		search(x + c, y + d, res);
-		return;
-	}
-	while (curNode->x < x) {
+		
+	while (curNode != nullptr) {
+		if (curNode->x == x && curNode->y == y) return;
 		if (curNode->next == nullptr) break;
-		curNode = curNode->next;
+		else curNode = curNode->next;
 	}
-	while (curNode->y < y) {
-		if (curNode->next == nullptr) break;
-		curNode = curNode->next;
-	}
-	else {
-		if (curNode->pos < pos) {
-			curNode->next = new Node(pos);
-			curNode->next->pre = curNode;
-		} else {
-			Node *newNode = new Node(pos);
-			newNode->next = curNode;
-			newNode->pre = curNode->pre;
-			curNode->pre->next = newNode;
-			curNode->pre = newNode;
-		}
-		res++;
-		std::cout << x << " " << y << std::endl;
-		search(x + a, y + b, res);
-		search(x + c, y + d, res);
-	}	
+	
+	curNode->next = new Node(pos, x, y);
+	res++;
+
+	search(x + a, y + b, res);
+	search(x + c, y + d, res);
+	
 }
 
 int main() {
@@ -80,6 +59,6 @@ int main() {
 	int res = 0;
 	std::cin >> a >> b >> c >> d;
 	search(startX, startY, res);
-	std::cout << res << std::endl;
+	std::cout << res - 1 << std::endl;
 	return 0;
 }
