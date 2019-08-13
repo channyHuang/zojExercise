@@ -16,7 +16,7 @@ int main() {
 	for (int i = 1; i <= len; i++) {
 		if (used[i]) continue;
 		
-		while (subSequence[j] < i) {
+		while (j < sublen && subSequence[j] < i) {
 			std::cout << subSequence[j++] << std::endl;
 			if (j >= sublen) break;
 		} 
